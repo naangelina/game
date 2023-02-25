@@ -4,7 +4,6 @@
     <script src="p5.js"></script>
     <script src="subwaytron.js"></script>
     <script defer src="https://unpkg.com/p5.collide2d"></script>
-    <script src="//instant.page/5.1.1" type="module" integrity="sha384-MWfCL6g1OTGsbSwfuMHc8+8J2u71/LA8dzlIN3ycajckxuZZmF+DNjdm7O6H3PSq"></script>
 
 
     <style>
@@ -13,9 +12,14 @@
             overflow: hidden
         }
 
+        #p {
+            position: absolute
+        }
+
     </style>
 </head>
-<body data-instant-intensity="mousedown">
+<body>
+    <p id="p"></p>
     <script>
         var w = window.innerWidth
         var h = window.innerHeight
@@ -25,7 +29,7 @@
 
         function setup() {
             createCanvas(w,h)
-
+            noSmooth()
         }
 
         function draw() {
@@ -33,10 +37,12 @@
 
             use.show()
             use.update() 
-            
+            document.getElementById('p').innerHTML = use.y
+
 
             if (keyIsDown(UP_ARROW)) {
                 use.y += -6
+                
             }
             if (keyIsDown(DOWN_ARROW)) {
                 use.y += 6
@@ -48,8 +54,9 @@
                 use.x += -6
             }
 
-            if (use.y < 0) {
+            if (use.y < 70) {
                 window.location.href = "subwaytron.html";
+                use.y = 70
             }
 
         }

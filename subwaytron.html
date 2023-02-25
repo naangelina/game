@@ -5,16 +5,28 @@
     <script src="subwaytron.js"></script>
     <script defer src="https://unpkg.com/p5.collide2d"></script>
 
-    <script src="//instant.page/5.1.1" type="module" integrity="sha384-MWfCL6g1OTGsbSwfuMHc8+8J2u71/LA8dzlIN3ycajckxuZZmF+DNjdm7O6H3PSq"></script>
     <style>
         body {
             margin: 0;
             overflow: hidden;
-            background-color:blanchedalmond;
+            min-height: 100%;
+        }
+    
+        #outOfBound {
+            width: 100vw;
+            height: 100%;
+            padding-bottom: 20px;
+            background-color: black;
+            position: absolute;
+            z-index: -1;
+            clip-path: polygon(0% 0%, 0% 100%, 15% 100%, 15% 10%, 85% 10%, 85% 85%, 15% 85%, 15% 100%, 100% 100%, 100% 0%);
+            /*clip-path: polygon(0% 0%, 0% 100%, 15% 100%, 15% 10%, 85% 10%, 85% 85%, 15% 85%, 15% 100%, 100% 100%, 100% 0%);*/
+
         }
     </style>
 </head>
-<body data-instant-intensity="mousedown">
+    <div id="outOfBound">
+    </div>
     <script>
         var w = window.innerWidth
         var h = window.innerHeight
@@ -24,7 +36,7 @@
 
         function setup() {
             createCanvas(w,h)
-
+            noSmooth()
         }
 
         function draw() {
@@ -48,14 +60,14 @@
             }
 
             
-            if (use.y >= h) {
-                use.y = 0
+            if (use.y > (h-110)) {
+                use.y = 70
                 window.location.href = "subwaytron2.html";
             }
 
-            
 
         }
+        
 
         function redirect(){
             window.location.href = "subwaytron2.html";

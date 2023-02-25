@@ -3,7 +3,7 @@
 function use() {
     //define jumper start position and dimensions
     this.x = w/2
-    this.y = 0
+    this.y = 70
     this.width = 30
     this.height = 30
 
@@ -18,13 +18,13 @@ function use() {
     //handle updating the object
     this.update = function() {
         
-        
-        if (this.y < 0) {
-            this.y = 0
+
+        if (this.y < 50) {
+            this.y = 50
             this.velocity = 0
         }
 
-        if (this.x < 0) {
+        if (this.x ) {
             this.x = 0
         }
 
