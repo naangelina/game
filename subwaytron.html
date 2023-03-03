@@ -10,23 +10,22 @@
             margin: 0;
             overflow: hidden;
             min-height: 100%;
+            background-color: black;
         }
     
-        #outOfBound {
-            width: 100vw;
-            height: 100%;
-            padding-bottom: 20px;
-            background-color: black;
-            position: absolute;
+        #border {
+            background-color: white;
+            width: 1050px;
+            height: 550px;
             z-index: -1;
-            clip-path: polygon(0% 0%, 0% 100%, 15% 100%, 15% 10%, 85% 10%, 85% 85%, 15% 85%, 15% 100%, 100% 100%, 100% 0%);
-            /*clip-path: polygon(0% 0%, 0% 100%, 15% 100%, 15% 10%, 85% 10%, 85% 85%, 15% 85%, 15% 100%, 100% 100%, 100% 0%);*/
-
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     </style>
 </head>
-    <div id="outOfBound">
-    </div>
+    <div id="border"></div>
     <script>
         var w = window.innerWidth
         var h = window.innerHeight
@@ -60,8 +59,8 @@
             }
 
             
-            if (use.y > (h-110)) {
-                use.y = 70
+            if (use.y > (h-85)) {
+                use.y = 60
                 window.location.href = "subwaytron2.html";
             }
 
