@@ -7,17 +7,25 @@
     <style>
         body {
             margin: 0;
-            overflow: hidden
+            overflow: hidden;
+            min-height: 100%;
+            background-color: black;
         }
 
-        #p {
-            position: absolute
+        #border {
+            background-color: white;
+            width: 1050px;
+            height: 550px;
+            z-index: -1;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
-
     </style>
 </head>
 <body>
-    <p id="p"></p>
+    <div id="border"></div>
     <script>
         var w = window.innerWidth
         var h = window.innerHeight
@@ -35,34 +43,28 @@
 
             use.show()
             use.update() 
-            document.getElementById('p').innerHTML = use.y
 
 
             if (keyIsDown(UP_ARROW)) {
-                use.y += -6
+                use.y += -4
                 
             }
             if (keyIsDown(DOWN_ARROW)) {
-                use.y += 6
+                use.y += 4
             }
             if (keyIsDown(RIGHT_ARROW)) {
-                use.x += 6
+                use.x += 4
             }
             if (keyIsDown(LEFT_ARROW)) {
-                use.x += -6
+                use.x += -4
             }
 
-            if (use.y < 70) {
+            if (use.y < 57) {
                 window.location.href = "subwaytron.html";
-                use.y = 70
+                use.y = 57
             }
 
         }
-
-        function redirect(){
-            window.location.href = "subwaytron.html";
-        }
-        
 
 
         

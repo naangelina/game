@@ -36,6 +36,7 @@
         function setup() {
             createCanvas(w,h)
             noSmooth()
+            frameRate(60)
         }
 
         function draw() {
@@ -46,34 +47,26 @@
             
 
             if (keyIsDown(UP_ARROW)) {
-                use.y += -6
+                use.y += -4
             }
             if (keyIsDown(DOWN_ARROW)) {
-                use.y += 6
+                use.y += 4
             }
             if (keyIsDown(RIGHT_ARROW)) {
-                use.x += 6
+                use.x += 4
             }
             if (keyIsDown(LEFT_ARROW)) {
-                use.x += -6
+                use.x += -4 
             }
 
             
             if (use.y > (h-85)) {
-                use.y = 60
+                use.y = 57
                 window.location.href = "subwaytron2.html";
             }
 
 
         }
-        
-
-        function redirect(){
-            window.location.href = "subwaytron2.html";
-        }
-
-
-        
 
     </script>
 </body>

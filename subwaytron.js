@@ -1,6 +1,6 @@
 function use() {
     this.x = w/2
-    this.y = 60
+    this.y = 57
     this.width = 30
     this.height = 30
 
@@ -12,13 +12,19 @@ function use() {
 
     //handle updating the object
     this.update = function() {
-        if (this.y < 60) {
-            this.y = 60
+        if (this.y < 57) {
+            this.y = 57
+        }
+        
+
+
+        if (this.x > (w-190)) {
+            this.x = w - 190
+        
         }
 
-
-        if (this.x > (w-30)) {
-            this.x = w - 30
+        if (this.x < (158)) {
+            this.x = 158
         
         }
     }
