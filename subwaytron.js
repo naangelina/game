@@ -29,3 +29,12 @@ function use() {
         }
     }
 }
+
+
+
+function table() {
+    this.x = tableRandomX;
+    this.y = tableRandomY
+    rect(tableRandomX,tableRandomY,100,40)            
+
+}
