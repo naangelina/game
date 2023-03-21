@@ -23,9 +23,24 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
+
+        #playY {
+            color: white;
+            position: absolute;
+            z-index: 100;
+        }
+        #tableY {
+            color: white;
+            position: absolute;
+            z-index: 100;
+            top: 20px;
+        }
     </style>
 </head>
     <div id="border"></div>
+    <p id="playY"></p>
+    <p id="tableY"></p>
+
     <script>
         var w = window.innerWidth
         var h = window.innerHeight
@@ -50,10 +65,15 @@
 
             table()
 
+            document.getElementById('playY').innerHTML = use.y
+            document.getElementById('tableY').innerHTML = tableRandomY
+
+
             if (hit === false) {
                 if (keyIsDown(UP_ARROW)) {
                     use.y += -4
                     tableRandomY += 0
+                    
                 }
                 if (keyIsDown(DOWN_ARROW)) {
                     use.y += 4
@@ -69,28 +89,55 @@
                 }
             }
             
-            if (keyIsDown(69)) {
-                if (hit === true) {
+
+            
+                if (keyIsDown(69) === true) {
+                    if (keyIsDown(UP_ARROW)) {
+                        if (hit === true) {
+                            use.y += -2
+                            tableRandomY += -2
+                        
+                        }
+                    }
+                    if (keyIsDown(DOWN_ARROW)) {
+                        if (hit === true) {
+                            use.y += 2
+                            tableRandomY += 2
+                        }
+
+                    }
+                    if (keyIsDown(RIGHT_ARROW)) {
+                        if (hit === true) {
+                            use.x += 2
+                            tableRandomX += 2 
+                        }
+                            
+                    }
+                    if (keyIsDown(LEFT_ARROW)) {
+                        if (hit === true) {
+                            use.x += -2 
+                            tableRandomX += -2 
+                        }
+                    }
+                } 
+                
+                if (keyIsDown(69) === false) {
                     if (keyIsDown(UP_ARROW)) {
                         use.y += -2
-                        tableRandomY += -2
+                        
                     }
                     if (keyIsDown(DOWN_ARROW)) {
                         use.y += 2
-                        tableRandomY += 2
                     }
                     if (keyIsDown(RIGHT_ARROW)) {
                         use.x += 2
-                        tableRandomX += 2
                     }
                     if (keyIsDown(LEFT_ARROW)) {
                         use.x += -2 
-                        tableRandomX += -2
                     }
-                    
-                } 
-            }
-                       
+                }
+            
+            
             
 
             
@@ -106,7 +153,11 @@
         }
 
             
-        
+        /*            
+            
+            
+            
+        */
 
     </script>
 </body>
