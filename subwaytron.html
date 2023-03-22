@@ -73,7 +73,6 @@
                 if (keyIsDown(UP_ARROW)) {
                     use.y += -4
                     tableRandomY += 0
-                    
                 }
                 if (keyIsDown(DOWN_ARROW)) {
                     use.y += 4
@@ -90,52 +89,51 @@
             }
             
 
-            
-                if (keyIsDown(69) === true) {
-                    if (keyIsDown(UP_ARROW)) {
-                        if (hit === true) {
-                            use.y += -2
-                            tableRandomY += -2
-                        
-                        }
-                    }
-                    if (keyIsDown(DOWN_ARROW)) {
-                        if (hit === true) {
-                            use.y += 2
-                            tableRandomY += 2
-                        }
-
-                    }
-                    if (keyIsDown(RIGHT_ARROW)) {
-                        if (hit === true) {
-                            use.x += 2
-                            tableRandomX += 2 
-                        }
-                            
-                    }
-                    if (keyIsDown(LEFT_ARROW)) {
-                        if (hit === true) {
-                            use.x += -2 
-                            tableRandomX += -2 
-                        }
-                    }
-                } 
-                
-                if (keyIsDown(69) === false) {
-                    if (keyIsDown(UP_ARROW)) {
+            if (keyIsDown(69) === true) {
+                if (keyIsDown(UP_ARROW)) {
+                    if (hit === true) {
                         use.y += -2
-                        
-                    }
-                    if (keyIsDown(DOWN_ARROW)) {
-                        use.y += 2
-                    }
-                    if (keyIsDown(RIGHT_ARROW)) {
-                        use.x += 2
-                    }
-                    if (keyIsDown(LEFT_ARROW)) {
-                        use.x += -2 
+                        tableRandomY += -2
+                    
                     }
                 }
+                if (keyIsDown(DOWN_ARROW)) {
+                    if (hit === true) {
+                        use.y += 2
+                        tableRandomY += 2
+                    }
+
+                }
+                if (keyIsDown(RIGHT_ARROW)) {
+                    if (hit === true) {
+                        use.x += 2
+                        tableRandomX += 2 
+                    }
+                        
+                }
+                if (keyIsDown(LEFT_ARROW)) {
+                    if (hit === true) {
+                        use.x += -2 
+                        tableRandomX += -2 
+                    }
+                }
+            } 
+            
+            if (keyIsDown(69) === false) {
+                if (keyIsDown(UP_ARROW)) {
+                    use.y += -2
+                    
+                }
+                if (keyIsDown(DOWN_ARROW)) {
+                    use.y += 2
+                }
+                if (keyIsDown(RIGHT_ARROW)) {
+                    use.x += 2
+                }
+                if (keyIsDown(LEFT_ARROW)) {
+                    use.x += -2 
+                }
+            }
             
             
             
