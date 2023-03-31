@@ -62,7 +62,7 @@
 
             use.show()
             use.update() 
-
+ 
             table()
 
             document.getElementById('playY').innerHTML = use.y
@@ -70,10 +70,10 @@
 
 
             if (hit === false) {
-                if (keyIsDown(UP_ARROW)) {
+                /*if (keyIsDown(UP_ARROW)) {
                     use.y += -4
                     tableRandomY += 0
-                }
+                }*/
                 if (keyIsDown(DOWN_ARROW)) {
                     use.y += 4
                     tableRandomY += 0
@@ -90,13 +90,13 @@
             
 
             if (keyIsDown(69) === true) {
-                if (keyIsDown(UP_ARROW)) {
+                /*if (keyIsDown(UP_ARROW)) {
                     if (hit === true) {
                         use.y += -2
                         tableRandomY += -2
                     
                     }
-                }
+                }*/
                 if (keyIsDown(DOWN_ARROW)) {
                     if (hit === true) {
                         use.y += 2
@@ -120,10 +120,10 @@
             } 
             
             if (keyIsDown(69) === false) {
-                if (keyIsDown(UP_ARROW)) {
+                /*if (keyIsDown(UP_ARROW)) {
                     use.y += -2
                     
-                }
+                }*/
                 if (keyIsDown(DOWN_ARROW)) {
                     use.y += 2
                 }
@@ -136,7 +136,16 @@
             }
             
             
-            
+            function keyPressed() {
+                if (keyCode == 32) {
+                    use.jump()
+                }
+            }
+
+            use.jump = function() {
+                use.lift = -20
+                use.y += use.lift
+            }
 
             
             if (use.y > (h-85)) {
