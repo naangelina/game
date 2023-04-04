@@ -3,6 +3,11 @@ function use() {
     this.y = 57
     this.width = 30
     this.height = 30
+    //opposing force 
+    this.lift = -10
+    //velocity
+    this.velocity = 0
+
 
 
     this.show = function() {
@@ -10,8 +15,19 @@ function use() {
         rect(this.x,this.y,this.width,this.height)
     }
 
+    this.jump = function() {
+        console.log('hi')
+        this.velocity += this.lift
+        
+    }
+
     //handle updating the object
     this.update = function() {
+        this.y += this.velocity
+        //air resistence
+        this.velocity *= 0.9
+
+        
         if (this.y < 57) {
             this.y = 57
         }
