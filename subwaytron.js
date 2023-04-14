@@ -54,3 +54,21 @@ function table() {
     rect(tableRandomX,tableRandomY,100,40)            
 
 }
+
+
+
+
+function zomb() {
+    this.show = function() {
+        this.x = zombRandomX
+        this.y = zombRandomY
+        rect(zombRandomX,zombRandomY,20,20) 
+    }
+    
+
+    this.update = function() {
+        zombRandomX += (use.x - zombRandomX) / zombSpeed
+        zombRandomY += (use.y - zombRandomY) / zombSpeed
+    
+    }
+}

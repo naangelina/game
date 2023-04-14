@@ -45,6 +45,7 @@
         var w = window.innerWidth
         var h = window.innerHeight
         var use
+        var zomb
       
         let hit = false
 
@@ -54,7 +55,11 @@
             frameRate(60)
             tableRandomX = random(158,w-260)
             tableRandomY = random(57,h-85)
+            zombRandomX = random(158,w-260)
+            zombRandomY = random(57,h-85)
+            zombSpeed = random(130,160)
             use = new use()
+            zomb = new zomb()
 
         }
 
@@ -63,6 +68,10 @@
 
             use.show()
             use.update() 
+
+            zomb.show()
+            zomb.update()
+            
  
             table()
 
@@ -71,10 +80,10 @@
 
 
             if (hit === false) {
-                /*if (keyIsDown(UP_ARROW)) {
+                if (keyIsDown(UP_ARROW)) {
                     use.y += -4
                     tableRandomY += 0
-                }*/
+                }
                 if (keyIsDown(DOWN_ARROW)) {
                     use.y += 4
                     tableRandomY += 0
@@ -91,13 +100,13 @@
             
 
             if (keyIsDown(69) === true) {
-                /*if (keyIsDown(UP_ARROW)) {
+                if (keyIsDown(UP_ARROW)) {
                     if (hit === true) {
                         use.y += -2
                         tableRandomY += -2
                     
                     }
-                }*/
+                }
                 if (keyIsDown(DOWN_ARROW)) {
                     if (hit === true) {
                         use.y += 2
@@ -121,10 +130,10 @@
             } 
             
             if (keyIsDown(69) === false) {
-                /*if (keyIsDown(UP_ARROW)) {
+                if (keyIsDown(UP_ARROW)) {
                     use.y += -2
                     
-                }*/
+                }
                 if (keyIsDown(DOWN_ARROW)) {
                     use.y += 2
                 }
