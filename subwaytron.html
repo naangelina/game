@@ -46,8 +46,10 @@
         var h = window.innerHeight
         var use
         var zomb
+        var userHP
       
-        let hit = false
+        let tableHit = false
+        let zombHit = false
 
         function setup() {
             createCanvas(w,h)
@@ -60,6 +62,7 @@
             zombSpeed = random(130,160)
             use = new use()
             zomb = new zomb()
+            userHP = new userHP()
 
         }
 
@@ -68,6 +71,8 @@
 
             use.show()
             use.update() 
+            userHP.show()
+            userHP.update()
 
             zomb.show()
             zomb.update()
@@ -79,7 +84,7 @@
             document.getElementById('tableY').innerHTML = tableRandomY
 
 
-            if (hit === false) {
+            if (tableHit === false) {
                 if (keyIsDown(UP_ARROW)) {
                     use.y += -4
                     tableRandomY += 0
@@ -101,28 +106,28 @@
 
             if (keyIsDown(69) === true) {
                 if (keyIsDown(UP_ARROW)) {
-                    if (hit === true) {
+                    if (tableHit === true) {
                         use.y += -2
                         tableRandomY += -2
                     
                     }
                 }
                 if (keyIsDown(DOWN_ARROW)) {
-                    if (hit === true) {
+                    if (tableHit === true) {
                         use.y += 2
                         tableRandomY += 2
                     }
 
                 }
                 if (keyIsDown(RIGHT_ARROW)) {
-                    if (hit === true) {
+                    if (tableHit === true) {
                         use.x += 2
                         tableRandomX += 2 
                     }
                         
                 }
                 if (keyIsDown(LEFT_ARROW)) {
-                    if (hit === true) {
+                    if (tableHit === true) {
                         use.x += -2 
                         tableRandomX += -2 
                     }
@@ -145,24 +150,25 @@
                 }
             }
             
-            
+            if (use.y > (h-85)) {
+                use.y = 57
+                window.location.href = "subwaytron2.html";
+            }
+
+            tableHit = collideRectRect(use.x,use.y,use.width,use.height,tableRandomX,tableRandomY,100,40)
+            zombHit = collideRectRect(use.x,use.y,use.width,use.height,zomb.x,zomb.y,20,20)
+
+            if (zombHit === true) {
+                console.log('hi')
+                userHP.width - 10
+            }
+
             function keyPressed() {
                 if (keyCode == 32) {
                     use.jump()
                 }
 
             }
-
-            
-            if (use.y > (h-85)) {
-                use.y = 57
-                window.location.href = "subwaytron2.html";
-            }
-
-            
-
-            hit = collideRectRect(use.x,use.y,use.width,use.height,tableRandomX,tableRandomY,100,40)
-
         }
 
             

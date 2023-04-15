@@ -3,36 +3,21 @@ function use() {
     this.y = 57
     this.width = 30
     this.height = 30
-    //opposing force 
     this.lift = -10
-    //velocity
     this.velocity = 0
-
-
 
     this.show = function() {
         fill(0,230,20)
         rect(this.x,this.y,this.width,this.height)
     }
 
-    this.jump = function() {
-        console.log('hi')
-        this.velocity += this.lift
-        
-    }
-
-    //handle updating the object
     this.update = function() {
         this.y += this.velocity
-        //air resistence
         this.velocity *= 0.9
-
         
         if (this.y < 57) {
             this.y = 57
         }
-        
-
 
         if (this.x > (w-190)) {
             this.x = w - 190
@@ -46,25 +31,46 @@ function use() {
     }
 }
 
+function userHP() {
+    this.width = 40
+    this.height = 5
+
+    this.show = function() {
+        fill('blue')
+        rect(use.x, use.y + 25, this.width, this.height)
+        rectMode(CENTER)
+    }
+    this.update = function() {
+        this.x = use.x
+        this.y = use.y
+
+        if (zombHit === true) {
+            console.log('hi')
+            if (this.width >= 0) {
+                this.width -= 1
+
+            }
+            if (this.width <= 0) {
+                this.width -= 0
+            }
+        }
+    }
+}
 
 
 function table() {
     this.x = tableRandomX;
     this.y = tableRandomY
     rect(tableRandomX,tableRandomY,100,40)            
-
+    fill('brown')
 }
-
-
-
 
 function zomb() {
     this.show = function() {
         this.x = zombRandomX
         this.y = zombRandomY
         rect(zombRandomX,zombRandomY,20,20) 
-    }
-    
+    } 
 
     this.update = function() {
         zombRandomX += (use.x - zombRandomX) / zombSpeed
