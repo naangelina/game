@@ -50,6 +50,7 @@
       
         let tableHit = false
         let zombHit = false
+        let zombHitTable = false
 
         function setup() {
             createCanvas(w,h)
@@ -85,70 +86,81 @@
 
 
             if (tableHit === false) {
-                if (keyIsDown(UP_ARROW)) {
+                if (userHP.width > 0) {
+                    if (keyIsDown(UP_ARROW)) {
                     use.y += -4
                     tableRandomY += 0
+                    }
+                    if (keyIsDown(DOWN_ARROW)) {
+                        use.y += 4
+                        tableRandomY += 0
+                    }
+                    if (keyIsDown(RIGHT_ARROW)) {
+                        use.x += 4
+                        tableRandomX += 0
+                    }
+                    if (keyIsDown(LEFT_ARROW)) {
+                        use.x += -4 
+                        tableRandomX += 0
+                    }
                 }
-                if (keyIsDown(DOWN_ARROW)) {
-                    use.y += 4
-                    tableRandomY += 0
-                }
-                if (keyIsDown(RIGHT_ARROW)) {
-                    use.x += 4
-                    tableRandomX += 0
-                }
-                if (keyIsDown(LEFT_ARROW)) {
-                    use.x += -4 
-                    tableRandomX += 0
-                }
+                
             }
             
 
             if (keyIsDown(69) === true) {
-                if (keyIsDown(UP_ARROW)) {
-                    if (tableHit === true) {
-                        use.y += -2
-                        tableRandomY += -2
-                    
-                    }
-                }
-                if (keyIsDown(DOWN_ARROW)) {
-                    if (tableHit === true) {
-                        use.y += 2
-                        tableRandomY += 2
-                    }
-
-                }
-                if (keyIsDown(RIGHT_ARROW)) {
-                    if (tableHit === true) {
-                        use.x += 2
-                        tableRandomX += 2 
-                    }
+                if (userHP.width > 0) {
+                    if (keyIsDown(UP_ARROW)) {
+                        if (tableHit === true) {
+                            use.y += -2
+                            tableRandomY += -2
                         
-                }
-                if (keyIsDown(LEFT_ARROW)) {
-                    if (tableHit === true) {
-                        use.x += -2 
-                        tableRandomX += -2 
+                        }
+                    }
+                    if (keyIsDown(DOWN_ARROW)) {
+                        if (tableHit === true) {
+                            use.y += 2
+                            tableRandomY += 2
+                        }
+
+                    }
+                    if (keyIsDown(RIGHT_ARROW)) {
+                        if (tableHit === true) {
+                            use.x += 2
+                            tableRandomX += 2 
+                        }
+                            
+                    }
+                    if (keyIsDown(LEFT_ARROW)) {
+                        if (tableHit === true) {
+                            use.x += -2 
+                            tableRandomX += -2 
+                        }
                     }
                 }
+                
             } 
             
             if (keyIsDown(69) === false) {
-                if (keyIsDown(UP_ARROW)) {
-                    use.y += -2
-                    
+                if (userHP.width > 0) {
+                    if (keyIsDown(UP_ARROW)) {
+                        use.y += -2
+                        
+                    }
+                    if (keyIsDown(DOWN_ARROW)) {
+                        use.y += 2
+                    }
+                    if (keyIsDown(RIGHT_ARROW)) {
+                        use.x += 2
+                    }
+                    if (keyIsDown(LEFT_ARROW)) {
+                        use.x += -2 
+                    }
                 }
-                if (keyIsDown(DOWN_ARROW)) {
-                    use.y += 2
-                }
-                if (keyIsDown(RIGHT_ARROW)) {
-                    use.x += 2
-                }
-                if (keyIsDown(LEFT_ARROW)) {
-                    use.x += -2 
-                }
+                
             }
+
+            
             
             if (use.y > (h-85)) {
                 use.y = 57
@@ -157,11 +169,10 @@
 
             tableHit = collideRectRect(use.x,use.y,use.width,use.height,tableRandomX,tableRandomY,100,40)
             zombHit = collideRectRect(use.x,use.y,use.width,use.height,zomb.x,zomb.y,20,20)
+            zombHitTable = collideRectRect(zomb.x,zomb.y,tableRandomX,tableRandomY,20,20)
 
-            if (zombHit === true) {
-                console.log('hi')
-                userHP.width - 10
-            }
+
+            
 
             function keyPressed() {
                 if (keyCode == 32) {

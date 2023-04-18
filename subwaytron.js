@@ -28,6 +28,8 @@ function use() {
             this.x = 158
         
         }
+
+        
     }
 }
 
@@ -37,8 +39,7 @@ function userHP() {
 
     this.show = function() {
         fill('blue')
-        rect(use.x, use.y + 25, this.width, this.height)
-        rectMode(CENTER)
+        rect(use.x -5, use.y + 40, this.width, this.height)
     }
     this.update = function() {
         this.x = use.x
@@ -47,13 +48,16 @@ function userHP() {
         if (zombHit === true) {
             console.log('hi')
             if (this.width >= 0) {
-                this.width -= 1
+                this.width -= 0.5
 
             }
             if (this.width <= 0) {
                 this.width -= 0
             }
         }
+
+        
+
     }
 }
 
@@ -76,5 +80,10 @@ function zomb() {
         zombRandomX += (use.x - zombRandomX) / zombSpeed
         zombRandomY += (use.y - zombRandomY) / zombSpeed
     
+        if (zombHitTable === true) {
+            zombRandomX += 0
+            zombRandomY += 0
+        }
     }
+
 }
