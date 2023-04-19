@@ -47,9 +47,13 @@
         var use
         var zomb
         var userHP
+        var table
+        var zomb2
       
         let tableHit = false
         let zombHit = false
+        let zombHit2 = false
+
         let zombHitTable = false
 
         function setup() {
@@ -60,11 +64,15 @@
             tableRandomY = random(57,h-85)
             zombRandomX = random(158,w-260)
             zombRandomY = random(57,h-85)
-            zombSpeed = random(130,160)
+            zombSpeed = random(150,180)
+            zombRandomX2 = random(158,w-260)
+            zombRandomY2 = random(57,h-85)
+            zombSpeed2 = random(150,180)
             use = new use()
             zomb = new zomb()
+            zomb2 = new zomb2()
             userHP = new userHP()
-
+            table = new table()
         }
 
         function draw() {
@@ -77,9 +85,11 @@
 
             zomb.show()
             zomb.update()
+            zomb2.show()
+            zomb2.update()
             
- 
-            table()
+            table.show()
+            table.update()
 
             document.getElementById('playY').innerHTML = use.y
             document.getElementById('tableY').innerHTML = tableRandomY
@@ -169,9 +179,16 @@
 
             tableHit = collideRectRect(use.x,use.y,use.width,use.height,tableRandomX,tableRandomY,100,40)
             zombHit = collideRectRect(use.x,use.y,use.width,use.height,zomb.x,zomb.y,20,20)
-            zombHitTable = collideRectRect(zomb.x,zomb.y,tableRandomX,tableRandomY,20,20)
+            zombHit2 = collideRectRect(use.x,use.y,use.width,use.height,zomb2.x,zomb2.y,20,20)
 
+            zombHitTable = collideRectRect(zomb.x,zomb.y,zomb.width,zomb.height,tableRandomX,tableRandomY,table.width,table.height)
 
+            if (zombHitTable === true) {
+                console.log('hit')
+                zombRandomX += 0
+                zombRandomY += 0
+            }
+            
             
 
             function keyPressed() {
