@@ -45,16 +45,18 @@
         var w = window.innerWidth
         var h = window.innerHeight
         var use
-        var zomb
+        var zomb = []
         var userHP
         var table
-        var zomb2
+        var i
       
         let tableHit = false
         let zombHit = false
-        let zombHit2 = false
 
         let zombHitTable = false
+
+        var bullet
+        
 
         function setup() {
             createCanvas(w,h)
@@ -62,31 +64,35 @@
             frameRate(60)
             tableRandomX = random(158,w-260)
             tableRandomY = random(57,h-85)
-            zombRandomX = random(158,w-260)
-            zombRandomY = random(57,h-85)
-            zombSpeed = random(150,180)
-            zombRandomX2 = random(158,w-260)
-            zombRandomY2 = random(57,h-85)
-            zombSpeed2 = random(150,180)
+            
             use = new use()
-            zomb = new zomb()
-            zomb2 = new zomb2()
+            
             userHP = new userHP()
             table = new table()
+
+            bullet = new bullet()
+
+            
+
+            for(let i = 0; i < 6; i ++){
+                zomb[i] = new zombie();
+            }
         }
+        
 
         function draw() {
             clear()
+            
+            for(let i = 0; i < 6; i ++){
+                zomb[i].draw()
+            }
+
 
             use.show()
             use.update() 
             userHP.show()
             userHP.update()
 
-            zomb.show()
-            zomb.update()
-            zomb2.show()
-            zomb2.update()
             
             table.show()
             table.update()
@@ -95,22 +101,24 @@
             document.getElementById('tableY').innerHTML = tableRandomY
 
 
+
             if (tableHit === false) {
                 if (userHP.width > 0) {
-                    if (keyIsDown(UP_ARROW)) {
-                    use.y += -4
-                    tableRandomY += 0
-                    }
-                    if (keyIsDown(DOWN_ARROW)) {
-                        use.y += 4
+                    if (keyIsDown(87)) {
+                        use.y += -3
                         tableRandomY += 0
                     }
-                    if (keyIsDown(RIGHT_ARROW)) {
-                        use.x += 4
+                    
+                    if (keyIsDown(83)) {
+                        use.y += 3
+                        tableRandomY += 0
+                    }
+                    if (keyIsDown(68)) {
+                        use.x += 3
                         tableRandomX += 0
                     }
-                    if (keyIsDown(LEFT_ARROW)) {
-                        use.x += -4 
+                    if (keyIsDown(65)) {
+                        use.x += -3 
                         tableRandomX += 0
                     }
                 }
@@ -120,28 +128,28 @@
 
             if (keyIsDown(69) === true) {
                 if (userHP.width > 0) {
-                    if (keyIsDown(UP_ARROW)) {
+                    if (keyIsDown(87)) {
                         if (tableHit === true) {
                             use.y += -2
                             tableRandomY += -2
                         
                         }
                     }
-                    if (keyIsDown(DOWN_ARROW)) {
+                    if (keyIsDown(83)) {
                         if (tableHit === true) {
                             use.y += 2
                             tableRandomY += 2
                         }
 
                     }
-                    if (keyIsDown(RIGHT_ARROW)) {
+                    if (keyIsDown(68)) {
                         if (tableHit === true) {
                             use.x += 2
                             tableRandomX += 2 
                         }
                             
                     }
-                    if (keyIsDown(LEFT_ARROW)) {
+                    if (keyIsDown(65)) {
                         if (tableHit === true) {
                             use.x += -2 
                             tableRandomX += -2 
@@ -153,17 +161,17 @@
             
             if (keyIsDown(69) === false) {
                 if (userHP.width > 0) {
-                    if (keyIsDown(UP_ARROW)) {
+                    if (keyIsDown(87)) {
                         use.y += -2
                         
                     }
-                    if (keyIsDown(DOWN_ARROW)) {
+                    if (keyIsDown(83)) {
                         use.y += 2
                     }
-                    if (keyIsDown(RIGHT_ARROW)) {
+                    if (keyIsDown(68)) {
                         use.x += 2
                     }
-                    if (keyIsDown(LEFT_ARROW)) {
+                    if (keyIsDown(65)) {
                         use.x += -2 
                     }
                 }
@@ -178,8 +186,6 @@
             }
 
             tableHit = collideRectRect(use.x,use.y,use.width,use.height,tableRandomX,tableRandomY,100,40)
-            zombHit = collideRectRect(use.x,use.y,use.width,use.height,zomb.x,zomb.y,20,20)
-            zombHit2 = collideRectRect(use.x,use.y,use.width,use.height,zomb2.x,zomb2.y,20,20)
 
             zombHitTable = collideRectRect(zomb.x,zomb.y,zomb.width,zomb.height,tableRandomX,tableRandomY,table.width,table.height)
 
@@ -197,8 +203,14 @@
                 }
 
             }
+
+            if (mouseIsPressed === true) {
+                bullet.show()
+                bullet.update()
+            }
         }
 
+        
             
         /*            
             

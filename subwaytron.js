@@ -37,13 +37,11 @@ function use() {
 }
 
 function userHP() {
-
     this.width = 40
     this.height = 5
 
-
     this.show = function() {
-        rect(use.x -5, use.y + 40, this.width, this.height)
+        rect(use.x -5, use.y + 35, this.width, this.height)
         fill('red')
 
     }
@@ -54,7 +52,7 @@ function userHP() {
         if (zombHit === true) {
             console.log('hi')
             if (this.width >= 0) {
-                this.width -= 0.5
+                this.width -= 0.2
 
             }
             if (this.width <= 0) {
@@ -62,16 +60,7 @@ function userHP() {
             }
         }
 
-        if (zombHit2 === true) {
-            console.log('him')
-            if (this.width >= 0) {
-                this.width -= 0.5
-
-            }
-            if (this.width <= 0) {
-                this.width -= 0
-            }
-        }
+        
         
 
     }
@@ -101,36 +90,47 @@ function table() {
     }
 }
 
-function zomb() {
-    this.show = function() {
-        this.x = zombRandomX
-        this.y = zombRandomY
-        rect(zombRandomX,zombRandomY,20,20) 
-        fill('pink') //zomb2
-    } 
 
-    this.update = function() {
+class zombie {
+    constructor() {
+        this.x = random(158,w-260)
+        this.y = random(57,h-85)
+        this.speed = random(150,400)
+        
+    }
+
+    draw() {
+        ellipse(this.x,this.y,20,20) 
+        fill('pink')
+        zombHit = collideRectRect(use.x,use.y,use.width,use.height,this.x,this.y,20,20)
+
+
         if (zombHitTable === false) {
-            zombRandomX += (use.x - zombRandomX) / zombSpeed
-            zombRandomY += (use.y - zombRandomY) / zombSpeed
+            this.x += (use.x - this.x) / this.speed
+            this.y += (use.y - this.y) / this.speed
+
+            
         }
     }
 }
 
-function zomb2() {
 
+function bullet() {
     this.show = function() {
-        this.x = zombRandomX2
-        this.y = zombRandomY2
-        rect(zombRandomX2,zombRandomY2,20,20) 
-        fill('#964B00') //table
-
-    } 
+        this.x = use.x
+        this.y = use.y
+        this.speed = 2
+    }
 
     this.update = function() {
-        if (zombHitTable === false) {
-            zombRandomX2 += (use.x - zombRandomX2) / zombSpeed
-            zombRandomY2 += (use.y - zombRandomY2) / zombSpeed
-        }
+        line(this.x,this.y,mouseX,mouseY)
+        fill('black')
+
+        ellipse(mouseX,mouseY,5,5)
+        this.x += (mouseX - this.x) / this.speed
+        this.y += (mouseY - this.x) / this.speed
+        
     }
 }
+
+//fix table user/zombie collision
