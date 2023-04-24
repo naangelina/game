@@ -3,6 +3,7 @@
 <head>
     <script src="p5.js"></script>
     <script src="subwaytron.js"></script>
+    
     <script defer src="https://unpkg.com/p5.collide2d"></script>
 
     <style>
@@ -15,8 +16,8 @@
     
         #border {
             background-color: white;
-            width: 1050px;
-            height: 550px;
+            width: 70%;
+            height: 80%;
             z-index: -1;
             position: absolute;
             top: 50%;
@@ -82,7 +83,8 @@
 
         function draw() {
             clear()
-            
+            zombHit = false
+
             for(let i = 0; i < 6; i ++){
                 zomb[i].draw()
             }
@@ -204,9 +206,14 @@
 
             }
 
-            if (mouseIsPressed === true) {
+            if (mouseIsPressed) {
+                
                 bullet.show()
                 bullet.update()
+
+                
+    
+                
             }
         }
 

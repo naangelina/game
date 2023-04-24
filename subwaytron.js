@@ -95,40 +95,56 @@ class zombie {
     constructor() {
         this.x = random(158,w-260)
         this.y = random(57,h-85)
-        this.speed = random(150,400)
+        this.speed = random(0.5,2)
         
     }
 
     draw() {
+        console.log(this.speeds)
         ellipse(this.x,this.y,20,20) 
+        var zo = createVector (this.x - use.x, this.y - use.y)
+        zo.normalize()
+
         fill('pink')
-        zombHit = collideRectRect(use.x,use.y,use.width,use.height,this.x,this.y,20,20)
 
+        if (!zombHit) {
+            zombHit = collideRectRect(use.x,use.y,use.width,use.height,this.x,this.y,20,20)
+        }
 
-        if (zombHitTable === false) {
-            this.x += (use.x - this.x) / this.speed
-            this.y += (use.y - this.y) / this.speed
+        this.x -= zo.x / this.speed
+        this.y -= zo.y / this.speed
+
+        
+        //this.x += (use.x - this.x) / this.speed
+        //this.y += (use.y - this.y) / this.speed
 
             
-        }
+        
     }
 }
 
 
 function bullet() {
+    this.x = use.x
+    this.y = use.y
+    
+
     this.show = function() {
-        this.x = use.x
-        this.y = use.y
-        this.speed = 2
+        line(this.x, this.y, mouseX,mouseY);
+        circle(mouseX, mouseY, 5)
+
+        fill('black')
+
     }
 
     this.update = function() {
-        line(this.x,this.y,mouseX,mouseY)
-        fill('black')
+        var m = createVector(bullet.x - mouseX,bullet.y - mouseY)
+        m.normalize()
 
-        ellipse(mouseX,mouseY,5,5)
-        this.x += (mouseX - this.x) / this.speed
-        this.y += (mouseY - this.x) / this.speed
+        bullet.x -= m.x *5
+        bullet.y -= m.y *5
+        console.log('pew')
+
         
     }
 }
