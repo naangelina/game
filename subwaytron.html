@@ -50,11 +50,23 @@
         var userHP
         var table
         var i
+
+        var healthPack
+
       
         let tableHit = false
         let zombHit = false
 
         let zombHitTable = false
+
+        let beginX = use.x
+        let beginY = use.y
+        let distX 
+        let distY
+        let endX = 0
+        let endY = 0
+        let step = 0.01
+        let pct = 0.0
 
         var bullet
         
@@ -65,25 +77,36 @@
             frameRate(60)
             tableRandomX = random(158,w-260)
             tableRandomY = random(57,h-85)
+            hpSpawn = random(0,4)
+
+            hpRandomX = random(158,w-260)
+            hpRandomY = random(57,h-85)
+
+            
             
             use = new use()
             
             userHP = new userHP()
             table = new table()
+            healthPack = new hpPack()
 
             bullet = new bullet()
 
-            
+            distX = endX - beginX
+            distY = endY - beginY
 
             for(let i = 0; i < 6; i ++){
                 zomb[i] = new zombie();
             }
+
+            
         }
         
 
         function draw() {
             clear()
             zombHit = false
+
 
             for(let i = 0; i < 6; i ++){
                 zomb[i].draw()
@@ -95,9 +118,17 @@
             userHP.show()
             userHP.update()
 
+            bullet.draw()
+
             
+
             table.show()
             table.update()
+
+            //hpPack.show()
+            //hpPack.update()
+            
+            
 
             document.getElementById('playY').innerHTML = use.y
             document.getElementById('tableY').innerHTML = tableRandomY
@@ -205,11 +236,16 @@
                 }
 
             }
-
-            if (mouseIsPressed) {
-                
-                bullet.show()
-                bullet.update()
+            
+            function mousePressed() {
+                beginX = use.x
+                beginY = use.y
+                endX = mouseX
+                endY = mouseY
+                distX = endX - use.x
+                distY = endY - use.y
+                //bullet.show()
+                //bullet.update()
 
                 
     

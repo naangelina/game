@@ -50,7 +50,6 @@ function userHP() {
         this.y = use.y
 
         if (zombHit === true) {
-            console.log('hi')
             if (this.width >= 0) {
                 this.width -= 0.2
 
@@ -83,8 +82,7 @@ function table() {
 
     this.update = function() {
         if (use.x > tableRandomX-table.width && use.x < tableRandomX.width && use.y > tableRandomY-table.height && use.y < tableRandomY+table.height) {
-            console.log('hi1')
-            use.x += 0
+                use.x += 0
             use.y += 0
         }
     }
@@ -100,7 +98,6 @@ class zombie {
     }
 
     draw() {
-        console.log(this.speeds)
         ellipse(this.x,this.y,20,20) 
         var zo = createVector (this.x - use.x, this.y - use.y)
         zo.normalize()
@@ -123,30 +120,43 @@ class zombie {
     }
 }
 
-
-function bullet() {
-    this.x = use.x
-    this.y = use.y
+class bullet {
+    constructor() {
+        this.x = use.x
+        this.y = use.y
     
-
-    this.show = function() {
-        line(this.x, this.y, mouseX,mouseY);
-        circle(mouseX, mouseY, 5)
-
-        fill('black')
-
     }
 
-    this.update = function() {
-        var m = createVector(bullet.x - mouseX,bullet.y - mouseY)
-        m.normalize()
+    draw() {
+        fill(0, 2)
+        rect(0, 0, width, height)
+        pct += step
+        if (pct < 1.0) {
+            bullet.x -= beginX + pct * distX
+            bullet.y -= beginY + pct * distY
+        }
+        fill(255)
+        ellipse(this.x, this.y, 20, 20)
+        //var m = createVector(bullet.x - mouseX,bullet.y - mouseY)
+        //m.normalize()
 
-        bullet.x -= m.x *5
-        bullet.y -= m.y *5
+        //bullet.x -= m.x *5
+        //bullet.y -= m.y *5
         console.log('pew')
-
         
     }
+}
+    
+
+
+function hpPack() {
+    this.x = hpRandomX
+    this.y = hpRandomY
+
+    this.show = function() {
+        rect(this.x,this.y,20,20)
+    }
+
 }
 
 //fix table user/zombie collision
