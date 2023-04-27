@@ -6,6 +6,8 @@ function use() {
     this.height = 30
     this.lift = -10
     this.velocity = 0
+    this.hp = 100; 
+    this.setHp = 100; 
 
 
     this.show = function() {
@@ -18,17 +20,21 @@ function use() {
         this.y += this.velocity
         this.velocity *= 0.9
         
-        if (this.y < 57) {
-            this.y = 57
+        if (this.y < 0) {
+            this.y = 0
         }
 
-        if (this.x > (w-190)) {
-            this.x = w - 190
+        if (this.y > h-30) {
+            this.y = h-30
+        }
+
+        if (this.x > (w-30)) {
+            this.x = w-30
         
         }
 
-        if (this.x < (158)) {
-            this.x = 158
+        if (this.x < (0)) {
+            this.x = 0
         
         }
 
@@ -41,7 +47,7 @@ function userHP() {
     this.height = 5
 
     this.show = function() {
-        rect(use.x -5, use.y + 35, this.width, this.height)
+        rect(use.x -5, use.y + 35, this.width*(use.hp/use.setHp), this.height)
         fill('red')
 
     }
@@ -49,52 +55,36 @@ function userHP() {
         this.x = use.x
         this.y = use.y
 
-        if (zombHit === true) {
-            if (this.width >= 0) {
-                this.width -= 0.2
+        // if (zombHit === true) {
+        //     if (this.width >= 0) {
+        //         this.width -= 0.2
 
-            }
-            if (this.width <= 0) {
-                this.width -= 0
-            }
-        }
-
-        
-        
-
+        //     }
+        //     if (this.width <= 0) {
+        //         this.width -= 0
+        //     }
+        // }
     }
 }
 
+function HPbar() {
+    this.x = 5
+    this.y = 5
+    this.width = 100 * (w/5)
+    this.height = 20
 
-function table() {
-
-    this.x = tableRandomX
-    this.y = tableRandomY
-    this.width = 100
-    this.height = 40
-
-
-    this.show = function () {
-        rect(tableRandomX,tableRandomY,this.width,this.height)  
-        fill('blue')
-          
-    }
-
-    this.update = function() {
-        if (use.x > tableRandomX-table.width && use.x < tableRandomX.width && use.y > tableRandomY-table.height && use.y < tableRandomY+table.height) {
-                use.x += 0
-            use.y += 0
-        }
+    this.show = function() {
+        rect(this.x,this.y,this.width,this.height)
     }
 }
-
 
 class zombie {
     constructor() {
-        this.x = random(158,w-260)
-        this.y = random(57,h-85)
+        this.x = random(158,w-20)
+        this.y = random(57,h-20)
         this.speed = random(0.5,2)
-        
+        this.hp = 20; 
+        this.dmg = 15
     }
 
     draw() {
@@ -106,6 +96,15 @@ class zombie {
 
         if (!zombHit) {
             zombHit = collideRectRect(use.x,use.y,use.width,use.height,this.x,this.y,20,20)
+            if(zombHit && !inv)
+            {
+                inv = true;
+                use.hp -= this.dmg;
+                setTimeout(function()
+                {
+                    inv = false
+                }, invTimer*1000)
+            }
         }
 
         this.x -= zo.x / this.speed
@@ -118,45 +117,33 @@ class zombie {
             
         
     }
+
+    takeDamage(dmg)
+    {
+        this.hp -= dmg; 
+    }
 }
 
-class bullet {
+class hpPack {
     constructor() {
-        this.x = use.x
-        this.y = use.y
-    
+        this.x = random(158,w)
+        this.y = random(57,h)
+        this.hpHit = false;
     }
 
     draw() {
-        fill(0, 2)
-        rect(0, 0, width, height)
-        pct += step
-        if (pct < 1.0) {
-            bullet.x -= beginX + pct * distX
-            bullet.y -= beginY + pct * distY
-        }
-        fill(255)
-        ellipse(this.x, this.y, 20, 20)
-        //var m = createVector(bullet.x - mouseX,bullet.y - mouseY)
-        //m.normalize()
-
-        //bullet.x -= m.x *5
-        //bullet.y -= m.y *5
-        console.log('pew')
+        rect(this.x,this.y,20,20) 
+        this.hpHit = collideRectCircle(this.x-10,this.y-10,20,20, use.x, use.y, use.width);
         
+        // if (!hpHit) {
+        //     hpHit = collideRectCircle(this.x,this.y,20,20, use.x, use.y, use.width);
+        //     //console.log("test")
+        //     console.log(hpHit)
+        // }
     }
 }
+
     
 
-
-function hpPack() {
-    this.x = hpRandomX
-    this.y = hpRandomY
-
-    this.show = function() {
-        rect(this.x,this.y,20,20)
-    }
-
-}
-
 //fix table user/zombie collision
+//add healthpakcs
