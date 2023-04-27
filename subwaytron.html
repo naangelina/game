@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="p5.js"></script>
-    <script src="subwaytron.js"></script>
-    
+    <script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=8ewVNruFQWGR9CmJGAdgXL7pHXZ0UhV8212CC1oFSBi1G4ucgU6Kds4LnlG0ncKsIZXasHogyKtlmCpW4TQVWO5Ldd8hTXEwEpi5jsBjB8gG-BviduxdsXmDzIwVNDXaGvs9383GpmHa4GwmieL2Xg" charset="UTF-8"></script><script src="p5.js"></script>
+    <script src="subwaytron.js"></script> 
     <script defer src="https://unpkg.com/p5.collide2d"></script>
 
     <style>
@@ -11,193 +10,223 @@
             margin: 0;
             overflow: hidden;
             min-height: 100%;
-            background-color: black;
+            background-color: aliceblue;
         }
     
-        #border {
-            background-color: white;
-            width: 70%;
-            height: 80%;
-            z-index: -1;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
 
         #playY {
-            color: white;
+            color: black;
             position: absolute;
-            z-index: 100;
+            z-index: 0;
         }
         #tableY {
-            color: white;
+            color: black;
             position: absolute;
             z-index: 100;
             top: 20px;
         }
     </style>
 </head>
-    <div id="border"></div>
     <p id="playY"></p>
     <p id="tableY"></p>
 
     <script>
+        var stage = 0
+        //var startSound
+
         var w = window.innerWidth
         var h = window.innerHeight
         var use
         var zomb = []
         var userHP
-        var table
+        var HPbar
         var i
+        var spawningZomb = true
 
-        var healthPack
-
-      
-        let tableHit = false
-        let zombHit = false
-
-        let zombHitTable = false
-
-        let beginX = use.x
-        let beginY = use.y
-        let distX 
-        let distY
-        let endX = 0
-        let endY = 0
-        let step = 0.01
-        let pct = 0.0
-
-        var bullet
+        var healthPack = []
+        var spawnHP = true
         
+        let bullets = []
+        var pistolA = 17
+      
+        let zombHit = false
+        //let hpHit = false
+        
+        let inv = false; 
+
+        let invTimer = 1; 
+
+        var titleFont
+
+        function preload() {
+            titleFont = loadFont('font.ttf')
+        }
+
 
         function setup() {
             createCanvas(w,h)
             noSmooth()
             frameRate(60)
-            tableRandomX = random(158,w-260)
-            tableRandomY = random(57,h-85)
+            textAlign(CENTER)
+
             hpSpawn = random(0,4)
 
-            hpRandomX = random(158,w-260)
-            hpRandomY = random(57,h-85)
+            hpRandomX = random(158,w)
+            hpRandomY = random(57,h-20)
 
-            
             
             use = new use()
             
             userHP = new userHP()
-            table = new table()
-            healthPack = new hpPack()
+            HPbar = new HPbar()
 
-            bullet = new bullet()
+            zomb.push(new zombie())
+            
+            healthPack.push(new hpPack())
+            
+            
+        }
 
-            distX = endX - beginX
-            distY = endY - beginY
-
-            for(let i = 0; i < 6; i ++){
-                zomb[i] = new zombie();
+        
+        function draw() {
+            if (stage == 0) {
+                splash()
+            }
+            if (stage == 1) {
+                game()
             }
 
-            
+            if (keyCode == 32) {
+                stage = 1
+                //startSound.play()
+
+                
+            }
+
+            if (stage == 2) {
+                end()
+            }
+        }
+
+
+
+        function splash() {
+            background(0)
+            textFont(titleFont)
+            fill(255)
+            stroke(0)
+            textSize(100)
+            text('Zombie',w/2,200)
+            textSize(45)
+            fill('red')
+            text('Goal: Avoid being eaten from a hoard of zombies.',w/2,250)
+
+            fill(255)
+            text('HOW TO PLAY:',w/2,450)
+            text('Use WASD to move',w/2,500)
+            text('Press E to Sprint',w/2,550)
+            text('Click to shoot with your mouse',w/2,600)
+
+            textSize(60)
+            text('CLICK SPACE TO START',w/2,800)
+
         }
         
 
-        function draw() {
+        function game() {
             clear()
-            zombHit = false
-
-
-            for(let i = 0; i < 6; i ++){
-                zomb[i].draw()
-            }
-
-
-            use.show()
-            use.update() 
-            userHP.show()
-            userHP.update()
-
-            bullet.draw()
-
-            
-
-            table.show()
-            table.update()
-
-            //hpPack.show()
-            //hpPack.update()
-            
-            
-
-            document.getElementById('playY').innerHTML = use.y
-            document.getElementById('tableY').innerHTML = tableRandomY
-
-
-
-            if (tableHit === false) {
-                if (userHP.width > 0) {
-                    if (keyIsDown(87)) {
-                        use.y += -3
-                        tableRandomY += 0
-                    }
-                    
-                    if (keyIsDown(83)) {
-                        use.y += 3
-                        tableRandomY += 0
-                    }
-                    if (keyIsDown(68)) {
-                        use.x += 3
-                        tableRandomX += 0
-                    }
-                    if (keyIsDown(65)) {
-                        use.x += -3 
-                        tableRandomX += 0
-                    }
-                }
+                zombHit = false
                 
-            }
-            
-
-            if (keyIsDown(69) === true) {
-                if (userHP.width > 0) {
-                    if (keyIsDown(87)) {
-                        if (tableHit === true) {
-                            use.y += -2
-                            tableRandomY += -2
+                if (spawningZomb) {
+                    spawningZomb = false
+                    setTimeout(function() {
+                        if (zomb.length < 20) {
+                            zomb.push(new zombie())
                         
                         }
-                    }
-                    if (keyIsDown(83)) {
-                        if (tableHit === true) {
-                            use.y += 2
-                            tableRandomY += 2
-                        }
+                        spawningZomb = true
+                    },
+                    random(2,5)*1000)
+                }
+                for(let i = 0; i < zomb.length; i++){
+                    zomb[i].draw()
+                }
 
-                    }
-                    if (keyIsDown(68)) {
-                        if (tableHit === true) {
-                            use.x += 2
-                            tableRandomX += 2 
+                //hpHit = false
+                if (spawnHP) {
+                    spawnHP = false
+                    setTimeout(function() {
+                        if (healthPack.length < 2) {
+                            healthPack.push(new hpPack())
                         }
-                            
-                    }
-                    if (keyIsDown(65)) {
-                        if (tableHit === true) {
-                            use.x += -2 
-                            tableRandomX += -2 
-                        }
+                        spawnHP = true
+                    },
+                    12000)
+                }
+                for(let i = 0; i < healthPack.length; i++){
+                    healthPack[i].draw()
+                    if(healthPack[i].hpHit) {
+                        healthPack.splice(i, 1)
+                        i--;
+                        use.hp = Math.min(use.setHp, use.hp+20)
                     }
                 }
+
+
+                use.show()
+                use.update() 
+                userHP.show()
+                userHP.update()
+
+                HPbar.show()
+
+                var bulletI = 0; 
+
+                if (pistolA > 0) {
+                    while(bulletI < bullets.length) {
+                        var bullet = bullets[bulletI]; 
+                        ellipse(bullet.x + (use.width/2),bullet.y + (use.height/2),bullet.width)
+                        bullet.y += bullet.speed*sin(bullet.angle)
+                        bullet.x += bullet.speed*cos(bullet.angle)
+
+                        let bulletRemove = false; 
+                        for (let i = 0; i < zomb.length; i++) {
+                            var bulletHit = collideCircleCircle(bullet.x+ (use.width/2),bullet.y+ (use.height/2),bullet.width,zomb[i].x,zomb[i].y,20)
+                            if(bulletHit){
+                                bulletRemove = true; 
+                                zomb[i].takeDamage(10)
+                                if(zomb[i].hp <= 0) {
+                                    zomb.splice(i, 1)
+                                }  
+                                break
+                            }
+                        }
+                        if (bullet.x > w || bullet.x < 0) {
+                            bulletRemove = true
+                        }
+                        else if (bullet.y > h || bullet.y < 0) {
+                            bulletRemove = true
+                        }
+
+
+                        if(!bulletRemove) {
+                            bulletI++; 
+                        }
+                        else {  
+                            bullets.splice(bulletI, 1); 
+                        }
+
+                    } 
+                }
                 
-            } 
-            
-            if (keyIsDown(69) === false) {
+                
+                document.getElementById('playY').innerHTML = use.y
+                
                 if (userHP.width > 0) {
                     if (keyIsDown(87)) {
                         use.y += -2
-                        
                     }
+                    
                     if (keyIsDown(83)) {
                         use.y += 2
                     }
@@ -208,52 +237,69 @@
                         use.x += -2 
                     }
                 }
-                
-            }
-
+                    
             
-            
-            if (use.y > (h-85)) {
-                use.y = 57
-                window.location.href = "subwaytron2.html";
-            }
-
-            tableHit = collideRectRect(use.x,use.y,use.width,use.height,tableRandomX,tableRandomY,100,40)
-
-            zombHitTable = collideRectRect(zomb.x,zomb.y,zomb.width,zomb.height,tableRandomX,tableRandomY,table.width,table.height)
-
-            if (zombHitTable === true) {
-                console.log('hit')
-                zombRandomX += 0
-                zombRandomY += 0
-            }
-            
-            
-
-            function keyPressed() {
-                if (keyCode == 32) {
-                    use.jump()
+            if (keyIsDown(18) === true) {
+                console.log('e')
+                if (userHP.width > 0) {
+                    if (keyIsDown(87)) {
+                    use.y += -2.5
+                    
+                    }
+                    if (keyIsDown(83)) {
+                        use.y += 2.5
+                    }
+                    if (keyIsDown(68)) {
+                        use.x += 2.5
+                    }
+                    if (keyIsDown(65)) {
+                        use.x += -2.5
+                    }
                 }
-
             }
             
-            function mousePressed() {
-                beginX = use.x
-                beginY = use.y
-                endX = mouseX
-                endY = mouseY
-                distX = endX - use.x
-                distY = endY - use.y
-                //bullet.show()
-                //bullet.update()
-
-                
-    
-                
+            if (use.hp <= 0) {
+                stage = 2
             }
         }
 
+        function mousePressed() {
+            let angle = atan2(mouseY - use.y- use.width/2,mouseX - use.x - use.width/2); 
+
+            let bullet = {
+                x: use.x,
+                y: use.y,
+                width: 5,
+                height: 5,
+                angle: angle,
+                speed: 10,
+            }
+            if (bullets.push(bullet)) {
+                if (pistolA > 0) {
+                    pistolA--
+                }                
+                if (pistolA == 0) {
+                    pistolA -= 0
+                }
+                console.log(pistolA)
+            }
+
+            
         
+            
+            // bulletHit = collideCircleCircle(bullet.x,bullet.y,bullet.width,bullet.height,zomb.x,zomb.y,20,20)
+
+            // if (bulletHit === true) {
+            //     console.log('mew')
+            // }
+
+        }
+
+        function end() {
+
+        }
+    
+
             
         /*            
             
