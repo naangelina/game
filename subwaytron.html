@@ -3,6 +3,10 @@
 <head>
     <script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=8ewVNruFQWGR9CmJGAdgXL7pHXZ0UhV8212CC1oFSBi1G4ucgU6Kds4LnlG0ncKsIZXasHogyKtlmCpW4TQVWO5Ldd8hTXEwEpi5jsBjB8gG-BviduxdsXmDzIwVNDXaGvs9383GpmHa4GwmieL2Xg" charset="UTF-8"></script><script src="p5.js"></script>
     <script src="subwaytron.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/addons/p5.sound.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <script defer src="https://unpkg.com/p5.collide2d"></script>
 
     <style>
@@ -10,9 +14,18 @@
             margin: 0;
             overflow: hidden;
             min-height: 100%;
-            background-color: aliceblue;
+            background-color: black;
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
         }
-    
+
+        html, body {
+        height: 100%;
+        }
+
 
         #playY {
             color: black;
@@ -25,29 +38,41 @@
             z-index: 100;
             top: 20px;
         }
+
     </style>
 </head>
-    <p id="playY"></p>
-    <p id="tableY"></p>
-
     <script>
         var stage = 0
-        //var startSound
+        var startUp
+        var gameover
+        var zhit
+        var bgm
+        var pew
 
-        var w = window.innerWidth
-        var h = window.innerHeight
+        var w = window.innerWidth / 2
+        var h = window.innerHeight /1.5
         var use
         var zomb = []
         var userHP
         var HPbar
+        var sprint
         var i
+        var peng
+        var z1
         var spawningZomb = true
+        var fish
+        var bg
+        var hits
 
         var healthPack = []
         var spawnHP = true
         
         let bullets = []
         var pistolA = 17
+        var ammo = []
+
+        var score = 0
+        var kills = 0
       
         let zombHit = false
         //let hpHit = false
@@ -60,6 +85,13 @@
 
         function preload() {
             titleFont = loadFont('font.ttf')
+            soundFormats('wav')
+            startUp = loadSound('sound/start')
+            hits = loadSound('sound/hurt')
+            gameover = loadSound('sound/gameover')
+            zhit = loadSound('sound/zhit')
+            bgm = loadSound('sound/bgm')
+            pew = loadSound('sound/pew')
         }
 
 
@@ -67,225 +99,299 @@
             createCanvas(w,h)
             noSmooth()
             frameRate(60)
-            textAlign(CENTER)
 
-            hpSpawn = random(0,4)
+            hpRandomX = random(0,w-40)
+            hpRandomY = random(0,h-40)
 
-            hpRandomX = random(158,w)
-            hpRandomY = random(57,h-20)
-
+            amRandomX = random(0,w-20)
+            amRandomY = random(0,h-20)
             
             use = new use()
             
             userHP = new userHP()
             HPbar = new HPbar()
+            sprint = new sprint()
 
             zomb.push(new zombie())
             
             healthPack.push(new hpPack())
+
+            peng = loadImage('peng.png');
+            z1 = loadImage('zomb1.png');
+            fish = loadImage('fish.png');
+
+            bg = loadImage('map2.png')
+            backgroundMusic()
             
-            
+        }
+
+        function backgroundMusic() {
+            bgm.setVolume(0.2)
+            bgm.play()
+            bgm.loop()
+            userStartAudio()
         }
 
         
         function draw() {
             if (stage == 0) {
                 splash()
+                if (keyCode == 32) {
+                    stage = 1
+                    startUp.setVolume(0.2)
+                    startUp.play()
+                    startUp.setLoop(false)
+                }
+                
+                document.body.style.cursor = "none";
             }
             if (stage == 1) {
                 game()
-            }
+                document.body.style.cursor = "crosshair";
 
-            if (keyCode == 32) {
-                stage = 1
-                //startSound.play()
-
-                
             }
 
             if (stage == 2) {
                 end()
+                document.body.style.cursor = "none";
+                if (keyCode == 82) {
+                    stage = 1
+                    return
+                }
             }
         }
 
 
-
         function splash() {
             background(0)
+            textAlign(CENTER)
+
             textFont(titleFont)
             fill(255)
             stroke(0)
-            textSize(100)
-            text('Zombie',w/2,200)
-            textSize(45)
+            textSize(90)
+            text('Zombie',w/2,100)
+            textSize(40)
             fill('red')
-            text('Goal: Avoid being eaten from a hoard of zombies.',w/2,250)
+            text('Goal: Avoid being eaten by a hoard of zombies.',w/2,150)
 
             fill(255)
-            text('HOW TO PLAY:',w/2,450)
-            text('Use WASD to move',w/2,500)
-            text('Press E to Sprint',w/2,550)
-            text('Click to shoot with your mouse',w/2,600)
+            text('HOW TO PLAY:',w/2,300)
+            text('Use WASD to move',w/2,350)
+            text('Press SHIFT to sprint',w/2,400)
+            text('Click to shoot with your mouse',w/2,450)
 
             textSize(60)
-            text('CLICK SPACE TO START',w/2,800)
+            text('CLICK SPACE TO START',w/2,600)
 
         }
         
 
         function game() {
             clear()
-                zombHit = false
-                
-                if (spawningZomb) {
-                    spawningZomb = false
-                    setTimeout(function() {
-                        if (zomb.length < 20) {
-                            zomb.push(new zombie())
-                        
-                        }
-                        spawningZomb = true
-                    },
-                    random(2,5)*1000)
-                }
-                for(let i = 0; i < zomb.length; i++){
-                    zomb[i].draw()
-                }
-
-                //hpHit = false
-                if (spawnHP) {
-                    spawnHP = false
-                    setTimeout(function() {
-                        if (healthPack.length < 2) {
-                            healthPack.push(new hpPack())
-                        }
-                        spawnHP = true
-                    },
-                    12000)
-                }
-                for(let i = 0; i < healthPack.length; i++){
-                    healthPack[i].draw()
-                    if(healthPack[i].hpHit) {
-                        healthPack.splice(i, 1)
-                        i--;
-                        use.hp = Math.min(use.setHp, use.hp+20)
-                    }
-                }
+            background(255)
+            image(bg,0,0,w,h)
 
 
-                use.show()
-                use.update() 
-                userHP.show()
-                userHP.update()
+            strokeWeight(2)
+            var amLeft = 'Ammo: ' + pistolA + '/17'
+            textSize(30)
+            fill(255)
+            textAlign(RIGHT)
+            text(amLeft, w - 320, h-15, 300)
 
-                HPbar.show()
+            textAlign(LEFT)
+            var scor = 'Score: ' + score
+            localStorage.setItem("score", scor);
 
-                var bulletI = 0; 
-
-                if (pistolA > 0) {
-                    while(bulletI < bullets.length) {
-                        var bullet = bullets[bulletI]; 
-                        ellipse(bullet.x + (use.width/2),bullet.y + (use.height/2),bullet.width)
-                        bullet.y += bullet.speed*sin(bullet.angle)
-                        bullet.x += bullet.speed*cos(bullet.angle)
-
-                        let bulletRemove = false; 
-                        for (let i = 0; i < zomb.length; i++) {
-                            var bulletHit = collideCircleCircle(bullet.x+ (use.width/2),bullet.y+ (use.height/2),bullet.width,zomb[i].x,zomb[i].y,20)
-                            if(bulletHit){
-                                bulletRemove = true; 
-                                zomb[i].takeDamage(10)
-                                if(zomb[i].hp <= 0) {
-                                    zomb.splice(i, 1)
-                                }  
-                                break
-                            }
-                        }
-                        if (bullet.x > w || bullet.x < 0) {
-                            bulletRemove = true
-                        }
-                        else if (bullet.y > h || bullet.y < 0) {
-                            bulletRemove = true
-                        }
+            text(scor, 20, h-15, 200)
+            var kamount = 'Zombies Killed: ' + kills
+            text(kamount, 20, h-45, 400)
+            localStorage.setItem("kill", kamount);
 
 
-                        if(!bulletRemove) {
-                            bulletI++; 
-                        }
-                        else {  
-                            bullets.splice(bulletI, 1); 
-                        }
+            strokeWeight(1)
 
-                    } 
-                }
-                
-                
-                document.getElementById('playY').innerHTML = use.y
-                
-                if (userHP.width > 0) {
-                    if (keyIsDown(87)) {
-                        use.y += -2
-                    }
+            zombHit = false
+            
+            if (spawningZomb) {
+                spawningZomb = false
+                setTimeout(function() {
+                    if (zomb.length < 20) {
+                        zomb.push(new zombie())
                     
-                    if (keyIsDown(83)) {
-                        use.y += 2
                     }
-                    if (keyIsDown(68)) {
-                        use.x += 2
+                    spawningZomb = true
+                },
+                random(2,5)*1000)
+            }
+            for(let i = 0; i < zomb.length; i++){
+                zomb[i].draw()
+            }
+
+            //hpHit = false
+            if (spawnHP) {
+                spawnHP = false
+                setTimeout(function() {
+                    if (healthPack.length < 2) {
+                        healthPack.push(new hpPack())
                     }
-                    if (keyIsDown(65)) {
-                        use.x += -2 
-                    }
+                    spawnHP = true
+                },
+                12000)
+            }
+            for(let i = 0; i < healthPack.length; i++){
+                healthPack[i].draw()
+                if(healthPack[i].hpHit) {
+                    healthPack.splice(i, 1)
+                    i--;
+                    use.hp = Math.min(use.setHp, use.hp+20)
+                    HPbar.width = Math.min(HPbar.setWidth, HPbar.width + HPbar.wHeal)
+                    pew.setVolume(0.4)
+                    pew.play()
+                    pew.setLoop(false)
+                    console.log(HPbar.wHeal)
+                    score += 100
                 }
+            }
+
+
+            use.show()
+            use.update() 
+            userHP.show()
+            userHP.update()
+
+            HPbar.show()
+            sprint.show()
+
+
+            var bulletI = 0; 
+
+            if (pistolA > 0) {
+                while(bulletI < bullets.length) {
+                    var bullet = bullets[bulletI]; 
+                    ellipse(bullet.x + (use.width/2),bullet.y + (use.height/2),bullet.width)
+                    bullet.y += bullet.speed*sin(bullet.angle)
+                    bullet.x += bullet.speed*cos(bullet.angle)
+
+                    let bulletRemove = false; 
+                    for (let i = 0; i < zomb.length; i++) {
+                        var bulletHit = collideRectCircle(zomb[i].x,zomb[i].y,30,49,bullet.x+ (use.width/2),bullet.y+ (use.height/2),bullet.width)
+                        //var bulletHit = collideCircleCircle(bullet.x+ (use.width/2),bullet.y+ (use.height/2),bullet.width,zomb[i].x,zomb[i].y,40)
+                        if(bulletHit){
+                            bulletRemove = true; 
+                            zomb[i].takeDamage(10)
+                            zhit.setVolume(0.1)
+                            zhit.play()
+                            zhit.setLoop(false)
+                            if(zomb[i].hp <= 0) {
+                                zomb.splice(i, 1)
+                                score += 200
+                                kills += 1
+                            }  
+                            break
+                        }
+                    }
+                    if (bullet.x > w || bullet.x < 0) {
+                        bulletRemove = true
+                    }
+                    else if (bullet.y > h || bullet.y < 0) {
+                        bulletRemove = true
+                    }
+
+
+                    if(!bulletRemove) {
+                        bulletI++; 
+                    }
+                    else {  
+                        bullets.splice(bulletI, 1); 
+                    }
+
+                } 
+            }
+                            
+            if (userHP.width > 0) {
+                if (keyIsDown(87)) {
+                    use.y += -2
+                }
+                
+                if (keyIsDown(83)) {
+                    use.y += 2
+                }
+                if (keyIsDown(68)) {
+                    use.x += 2
+                }
+                if (keyIsDown(65)) {
+                    use.x += -2 
+                }
+            }
                     
             
-            if (keyIsDown(18) === true) {
+            if (keyIsDown(16) === true) {
                 console.log('e')
-                if (userHP.width > 0) {
+                if (userHP.width > 0 && sprint.width > 0) {
                     if (keyIsDown(87)) {
                     use.y += -2.5
-                    
+                    sprint.width -= sprint.drain
                     }
                     if (keyIsDown(83)) {
                         use.y += 2.5
+                        sprint.width -= sprint.drain
+
                     }
                     if (keyIsDown(68)) {
                         use.x += 2.5
+                        sprint.width -= sprint.drain
+
                     }
                     if (keyIsDown(65)) {
                         use.x += -2.5
+                        sprint.width -= sprint.drain
+
                     }
                 }
             }
+
+            if (keyIsDown(16) === false) {
+                if (sprint.width < sprint.setWidth) {
+                    sprint.width += sprint.drain
+                }
+            }
+            
+            
             
             if (use.hp <= 0) {
                 stage = 2
+                gameover.setVolume(0.4)
+                gameover.play()
+                gameover.setLoop(false)
+                return
             }
         }
 
         function mousePressed() {
             let angle = atan2(mouseY - use.y- use.width/2,mouseX - use.x - use.width/2); 
 
-            let bullet = {
-                x: use.x,
-                y: use.y,
-                width: 5,
-                height: 5,
-                angle: angle,
-                speed: 10,
-            }
-            if (bullets.push(bullet)) {
-                if (pistolA > 0) {
-                    pistolA--
-                }                
-                if (pistolA == 0) {
-                    pistolA -= 0
+            if (stage ==  1) {
+                let bullet = {
+                    x: use.x,
+                    y: use.y,
+                    width: 5,
+                    height: 5,
+                    angle: angle,
+                    speed: 6,
                 }
-                console.log(pistolA)
+                if (bullets.push(bullet)) {
+                    if (pistolA > 0) {
+                        pistolA--
+                    }                
+                    if (pistolA == 0) {
+                        pistolA -= 0
+                    }
+                    console.log(pistolA)
+                }
             }
 
-            
-        
             
             // bulletHit = collideCircleCircle(bullet.x,bullet.y,bullet.width,bullet.height,zomb.x,zomb.y,20,20)
 
@@ -296,6 +402,30 @@
         }
 
         function end() {
+            textAlign(CENTER)
+            background(0)
+            textFont(titleFont)
+            fill('red')
+            stroke(0)
+            textSize(100)
+            text('YOU DIED',w/2,200)
+            textSize(45)
+            fill(255)
+            text('Penguins are now extinct',w/2,250)
+
+            const rscore = localStorage.getItem("score")
+            const rkill = localStorage.getItem("kill")
+
+
+            fill(255)
+            textSize(50)
+            text(rscore,w/2,500)
+            text(rkill,w/2,450)
+
+            textSize(60)
+            text('CLICK R TO RESTART',w/2,600)
+
+            
 
         }
     
